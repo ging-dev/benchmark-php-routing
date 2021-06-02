@@ -10,7 +10,8 @@ class HackRouting_MemoryCached extends HackRouting_Abstract
     public function __construct()
     {
         $cache = new MemoryCache();
-        $this->loadedRoutes($cache);
+        // call getResolver() to trigger cache
+        $this->loadedRoutes($cache)->getResolver();
 
         $this->cache = $cache;
     }
