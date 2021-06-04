@@ -18,9 +18,11 @@ class quick_benchmark
        'fast_group_count' => \Benchmark_Routing\FastRoute_GroupCountBased::class,
 
         // cached
-        'symfony_compiled' => \Benchmark_Routing\Symfony_Compiled::class, 
+        'symfony_compiled' => \Benchmark_Routing\Symfony_Compiled::class,
+        'symfony_memory_compiled' => \Benchmark_Routing\Symfony_MemoryCompiled::class,
 
         'hack_routing_cached' => \Benchmark_Routing\HackRouting_FilesCached::class,
+        'hack_routing_memory_cached' => \Benchmark_Routing\HackRouting_MemoryCached::class,
         'hack_routing_apcu_cached' => \Benchmark_Routing\HackRouting_ApcuCached::class,
 
         'fast_mark_cached' => \Benchmark_Routing\FastRoute_MarkBased_Cached::class,
