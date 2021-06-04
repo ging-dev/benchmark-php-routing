@@ -7,15 +7,16 @@ new quick_benchmark($argv[1] ?? '', $argv[2] ?? '');
 class quick_benchmark
 {
 	const benchmark = array(
-        'symfony' => \Benchmark_Routing\Symfony::class,
-        'hack_routing' => \Benchmark_Routing\HackRouting::class,
-        'fast_mark' => \Benchmark_Routing\FastRoute_MarkBased::class,
-        'fast_group_pos' => \Benchmark_Routing\FastRoute_GroupPosBased::class,
-        'fast_char_count' => \Benchmark_Routing\FastRoute_CharCountBased::class,
-        'fast_group_count' => \Benchmark_Routing\FastRoute_GroupCountBased::class,
-        'symfony_compiled' => \Benchmark_Routing\Symfony_Compiled::class,
-     //   'symfony_memory_compiled' => \Benchmark_Routing\Symfony_MemoryCompiled::class,
+       // 'symfony' => \Benchmark_Routing\Symfony::class,
+       // 'hack_routing' => \Benchmark_Routing\HackRouting::class,
+       // 'fast_mark' => \Benchmark_Routing\FastRoute_MarkBased::class,
+       // 'fast_group_pos' => \Benchmark_Routing\FastRoute_GroupPosBased::class,
+       // 'fast_char_count' => \Benchmark_Routing\FastRoute_CharCountBased::class,
+       // 'fast_group_count' => \Benchmark_Routing\FastRoute_GroupCountBased::class,
+        'symfony_compiled' => \Benchmark_Routing\Symfony_Compiled::class, 
+       // 'symfony_memory_compiled' => \Benchmark_Routing\Symfony_MemoryCompiled::class,
         'hack_routing_cached' => \Benchmark_Routing\HackRouting_FilesCached::class,
+        'hack_routing_apcu_cached' => \Benchmark_Routing\HackRouting_ApcuCached::class,
        // 'hack_routing_memory_cached' => \Benchmark_Routing\HackRouting_MemoryCached::class,
     );
 
@@ -46,7 +47,7 @@ class quick_benchmark
 		{
 			foreach (self::scenario as $scenario => $revs)
 			{
-				$time = shell_exec("php -dopcache.jit=1235 -dopcache.enable_cli=yes -dopcache.enable=yes " . __FILE__ . " {$case} {$scenario}");
+				$time = shell_exec("php -dopcache.jit=1235 -dopcache.enable_cli=1 -dopcache.enable=1 -dapc.enable=1 -dapc.enable_cli=1 " . __FILE__ . " {$case} {$scenario}");
 				$progressBar->advance();
 
 				$result[] = array(
@@ -62,7 +63,7 @@ class quick_benchmark
 		$progressBar->finish();
 		$output->writeln('');
 
-		usort($result, function($a, $b)
+		usort($result, static function($a, $b)
 		{
 			return $b['per_second'] <=> $a['per_second'];
 		});
