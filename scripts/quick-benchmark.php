@@ -7,17 +7,26 @@ new quick_benchmark($argv[1] ?? '', $argv[2] ?? '');
 class quick_benchmark
 {
 	const benchmark = array(
-       // 'symfony' => \Benchmark_Routing\Symfony::class,
-       // 'hack_routing' => \Benchmark_Routing\HackRouting::class,
-       // 'fast_mark' => \Benchmark_Routing\FastRoute_MarkBased::class,
-       // 'fast_group_pos' => \Benchmark_Routing\FastRoute_GroupPosBased::class,
-       // 'fast_char_count' => \Benchmark_Routing\FastRoute_CharCountBased::class,
-       // 'fast_group_count' => \Benchmark_Routing\FastRoute_GroupCountBased::class,
+	    // uncached
+       'symfony' => \Benchmark_Routing\Symfony::class,
+       
+       'hack_routing' => \Benchmark_Routing\HackRouting::class,
+
+       'fast_mark' => \Benchmark_Routing\FastRoute_MarkBased::class,
+       'fast_group_pos' => \Benchmark_Routing\FastRoute_GroupPosBased::class,
+       'fast_char_count' => \Benchmark_Routing\FastRoute_CharCountBased::class,
+       'fast_group_count' => \Benchmark_Routing\FastRoute_GroupCountBased::class,
+
+        // cached
         'symfony_compiled' => \Benchmark_Routing\Symfony_Compiled::class, 
-       // 'symfony_memory_compiled' => \Benchmark_Routing\Symfony_MemoryCompiled::class,
+
         'hack_routing_cached' => \Benchmark_Routing\HackRouting_FilesCached::class,
         'hack_routing_apcu_cached' => \Benchmark_Routing\HackRouting_ApcuCached::class,
-       // 'hack_routing_memory_cached' => \Benchmark_Routing\HackRouting_MemoryCached::class,
+
+        'fast_mark_cached' => \Benchmark_Routing\FastRoute_MarkBased_Cached::class,
+        'fast_group_pos_cached' => \Benchmark_Routing\FastRoute_GroupPosBased_Cached::class,
+        'fast_char_count_cached' => \Benchmark_Routing\FastRoute_CharCountBased_Cached::class,
+        'fast_group_count_cached' => \Benchmark_Routing\FastRoute_GroupCountBased_Cached::class,
     );
 
 	const repeats = 300;
