@@ -5,7 +5,6 @@ namespace Benchmark_Routing;
 use HackRouting\BaseRouter;
 use HackRouting\Cache\CacheInterface;
 use HackRouting\HttpMethod;
-use Psr\Cache\CacheItemPoolInterface;
 
 abstract class HackRouting_Abstract extends Benchmark
 {

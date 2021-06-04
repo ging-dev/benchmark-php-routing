@@ -9,21 +9,20 @@ use Symfony\Component\Routing\RouteCollection;
 
 use function file_put_contents;
 
-class Symfony_MemoryCompiled extends Benchmark
+class Symfony_Instance extends Benchmark
 {
-	protected $compiled;
+	protected $matcher;
 
 	function __construct()
 	{
 		$dumper = new CompiledUrlMatcherDumper( $this->loadedRoutes() );
-		$this->compiled = $dumper->getCompiledRoutes();
-	}
+		$compiled = $dumper->getCompiledRoutes();
+        $this->matcher = new CompiledUrlMatcher($compiled, new RequestContext());
+    }
 
 	function runRouting(string $route) : array
 	{
-		$matcher = new CompiledUrlMatcher($this->compiled, new RequestContext());
-
-		return $matcher->match($route);
+		return $this->matcher->match($route);
 	}
 
 	function loadedRoutes() : RouteCollection
