@@ -30,17 +30,8 @@ jobs:
           extensions: bcmath, mbstring, intl, sodium, json, opcache, apcu
           coverage: none
 
-      - name: "caching dependencies"
-        uses: "actions/cache@v2"
-        with:
-          path: |
-            ~/.composer/cache
-            vendor
-          key: "php-${{ matrix.php-version }}"
-          restore-keys: "php-${{ matrix.php-version }}"
-
       - name: "installing dependencies"
-        run: "composer install --no-interaction --no-progress --ignore-platform-req php"
+        run: "composer install --no-interaction --no-progress"
 
       - name: "running phpbench ( raw )"
         run: php vendor/bin/phpbench run --report=default --group raw
