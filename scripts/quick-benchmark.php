@@ -4,10 +4,10 @@ namespace BenchmarkRouting;
 
 /* Quick and dirty script to calculate routes matched per second */
 
+use Psl\Shell;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Psl\Shell;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -17,29 +17,34 @@ final class QuickBenchmark
     public const BENCHMARKS = array(
         // uncached, router instance is created in each iteration from scratch.
         'symfony' => Symfony\Symfony::class,
-        'hack_routing' => HackRouting\HackRouting::class,
-        'fast_mark' => FastRoute\FastRouteMarkBased::class,
-        'fast-route:dispatcher(mark_cached)' => FastRoute\FastRouteMarkBased::class,
-        'fast-route:dispatcher(group_pos_cached)' => FastRoute\FastRouteGroupPosBased::class,
-        'fast-route:dispatcher(char_count_cached)' => FastRoute\FastRouteCharCountBased::class,
-        'fast-route:dispatcher(group_count_cached)' => FastRoute\FastRouteGroupCountBased::class,
+
+        'hack-routing' => HackRouting\HackRouting::class,
+
+        'fast-route:dispatcher(mark)' => FastRoute\FastRouteMarkBased::class,
+        'fast-route:dispatcher(group_pos)' => FastRoute\FastRouteGroupPosBased::class,
+        'fast-route:dispatcher(char_count)' => FastRoute\FastRouteCharCountBased::class,
+        'fast-route:dispatcher(group_count)' => FastRoute\FastRouteGroupCountBased::class,
 
         // router instance is created in each iteration using cache.
         'symfony:cached(file)' => Symfony\SymfonyCached::class,
+
         'hack-routing:cached(file)' => HackRouting\HackRoutingFilesCached::class,
         'hack-routing:cached(apcu)' => HackRouting\HackRoutingApcuCached::class,
-        'fast-route:dispatcher(mark_cached):cached(file)' => FastRoute\FastRouteMarkBasedCached::class,
-        'fast-route:dispatcher(group_pos_cached):cached(file)' => FastRoute\FastRouteGroupPosBasedCached::class,
-        'fast-route:dispatcher(char_count_cached):cached(file)' => FastRoute\FastRouteCharCountBasedCached::class,
-        'fast-route:dispatcher(group_count_cached):cached(file)' => FastRoute\FastRouteGroupCountBasedCached::class,
+
+        'fast-route:dispatcher(mark):cached(file)' => FastRoute\FastRouteMarkBasedCached::class,
+        'fast-route:dispatcher(group_pos):cached(file)' => FastRoute\FastRouteGroupPosBasedCached::class,
+        'fast-route:dispatcher(char_count):cached(file)' => FastRoute\FastRouteCharCountBasedCached::class,
+        'fast-route:dispatcher(group_count):cached(file)' => FastRoute\FastRouteGroupCountBasedCached::class,
 
         // router instance is only created once in the constructor, and kept in the memory.
         'symfony:instance' => Symfony\SymfonyInstance::class,
+
         'hack-routing:instance' => HackRouting\HackRoutingInstance::class,
-        'fast-route:dispatcher(mark_cached):instance' => FastRoute\FastRouteMarkBasedInstance::class,
-        'fast-route:dispatcher(group_pos_cached):instance' => FastRoute\FastRouteGroupPosBasedInstance::class,
-        'fast-route:dispatcher(char_count_cached):instance' => FastRoute\FastRouteCharCountBasedInstance::class,
-        'fast-route:dispatcher(group_count_cached):instance' => FastRoute\FastRouteGroupCountBasedInstance::class,
+
+        'fast-route:dispatcher(mark):instance' => FastRoute\FastRouteMarkBasedInstance::class,
+        'fast-route:dispatcher(group_pos):instance' => FastRoute\FastRouteGroupPosBasedInstance::class,
+        'fast-route:dispatcher(char_count):instance' => FastRoute\FastRouteCharCountBasedInstance::class,
+        'fast-route:dispatcher(group_count):instance' => FastRoute\FastRouteGroupCountBasedInstance::class,
     );
 
     public const REPEATS = 300;
@@ -70,7 +75,7 @@ final class QuickBenchmark
         $result = [];
         foreach (self::BENCHMARKS as $case => $class) {
             foreach (self::scenario as $scenario => $revs) {
-                $time = Shell\execute("php", ["-dopcache.jit=1235",  "-dopcache.enable_cli=1", "-dopcache.enable=1", "-dapc.enable=1", "-dapc.enable_cli=1", __FILE__, $case, $scenario]);
+                $time = Shell\execute("php", ["-dopcache.jit=1235", "-dopcache.enable_cli=1", "-dopcache.enable=1", "-dapc.enable=1", "-dapc.enable_cli=1", __FILE__, $case, $scenario]);
                 $progressBar->advance();
 
                 $result[] = array(
