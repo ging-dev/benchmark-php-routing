@@ -28,7 +28,7 @@ while ($r = fgets($fp)) {
     $fast[] = "\$routes->addRoute('GET', '{$r}', ['_route' => '{$name}']);";
 
     // '/addon' => 'addon'
-    $hack[] = "            '{$r}' => '{$name}',";
+    $hack[] = "            '{$r}' => ['_route' => '{$name}'],";
 
     $m = $r;
     $result = "['_route' => '{$name}'";
@@ -67,12 +67,12 @@ file_put_contents(
     <<<PHP
 <?php
 
-use HackRouting\BaseRouter;
+use HackRouting\AbstractMatcher;
 use HackRouting\HttpMethod;
 
 \$cache = \$cache ?? null;
 
-return new class(\$cache) extends BaseRouter {
+return new class(\$cache) extends AbstractMatcher {
    protected function getRoutes(): array { 
        return [
            HttpMethod::GET => [

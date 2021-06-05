@@ -3,7 +3,7 @@
 namespace BenchmarkRouting\HackRouting;
 
 use BenchmarkRouting\Benchmark;
-use HackRouting\BaseRouter;
+use HackRouting\AbstractMatcher;
 use HackRouting\HttpMethod;
 use PhpBench\Attributes as Bench;
 
@@ -14,10 +14,10 @@ final class HackRouting extends Benchmark
     {
         $router = $this->loadedRoutes();
 
-        return ['_route' => $router->routeMethodAndPath(HttpMethod::GET, $route)[0]];
+        return $router->match(HttpMethod::GET, $route)[0];
     }
 
-    public function loadedRoutes(): BaseRouter
+    public function loadedRoutes(): AbstractMatcher
     {
         $cache = null;
         return include __DIR__ . '/../../routes/hack-routes.php';
