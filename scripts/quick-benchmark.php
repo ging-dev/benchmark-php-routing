@@ -1,137 +1,138 @@
-<?php /* Quick and dirty script to calculate routes matched per second */
+<?php
+
+namespace BenchmarkRouting;
+
+/* Quick and dirty script to calculate routes matched per second */
+
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Psl\Shell;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-new quick_benchmark($argv[1] ?? '', $argv[2] ?? '');
 
-class quick_benchmark
+final class QuickBenchmark
 {
-	const benchmark = array(
-	    // uncached, router instance is created in each iteration from scratch.
-        'symfony' => \Benchmark_Routing\Symfony::class,
-        
-        'hack_routing' => \Benchmark_Routing\HackRouting::class,
-        
-        'fast_mark' => \Benchmark_Routing\FastRoute_MarkBased::class,
-        'fast_group_pos' => \Benchmark_Routing\FastRoute_GroupPosBased::class,
-        'fast_char_count' => \Benchmark_Routing\FastRoute_CharCountBased::class,
-        'fast_group_count' => \Benchmark_Routing\FastRoute_GroupCountBased::class,
+    public const BENCHMARKS = array(
+        // uncached, router instance is created in each iteration from scratch.
+        'symfony' => Symfony\Symfony::class,
+        'hack_routing' => HackRouting\HackRouting::class,
+        'fast_mark' => FastRoute\FastRouteMarkBased::class,
+        'fast-route:dispatcher(mark_cached)' => FastRoute\FastRouteMarkBased::class,
+        'fast-route:dispatcher(group_pos_cached)' => FastRoute\FastRouteGroupPosBased::class,
+        'fast-route:dispatcher(char_count_cached)' => FastRoute\FastRouteCharCountBased::class,
+        'fast-route:dispatcher(group_count_cached)' => FastRoute\FastRouteGroupCountBased::class,
 
         // router instance is created in each iteration using cache.
-        'symfony_compiled' => \Benchmark_Routing\Symfony_Compiled::class,
-
-        'hack_routing_cached' => \Benchmark_Routing\HackRouting_FilesCached::class,
-        'hack_routing_apcu_cached' => \Benchmark_Routing\HackRouting_ApcuCached::class,
-
-        'fast_mark_cached' => \Benchmark_Routing\FastRoute_MarkBased_Cached::class,
-        'fast_group_pos_cached' => \Benchmark_Routing\FastRoute_GroupPosBased_Cached::class,
-        'fast_char_count_cached' => \Benchmark_Routing\FastRoute_CharCountBased_Cached::class,
-        'fast_group_count_cached' => \Benchmark_Routing\FastRoute_GroupCountBased_Cached::class,
+        'symfony:cached(file)' => Symfony\SymfonyCached::class,
+        'hack-routing:cached(file)' => HackRouting\HackRoutingFilesCached::class,
+        'hack-routing:cached(apcu)' => HackRouting\HackRoutingApcuCached::class,
+        'fast-route:dispatcher(mark_cached):cached(file)' => FastRoute\FastRouteMarkBasedCached::class,
+        'fast-route:dispatcher(group_pos_cached):cached(file)' => FastRoute\FastRouteGroupPosBasedCached::class,
+        'fast-route:dispatcher(char_count_cached):cached(file)' => FastRoute\FastRouteCharCountBasedCached::class,
+        'fast-route:dispatcher(group_count_cached):cached(file)' => FastRoute\FastRouteGroupCountBasedCached::class,
 
         // router instance is only created once in the constructor, and kept in the memory.
-        'symfony_instance' => \Benchmark_Routing\Symfony_Instance::class,
-        
-        'hack_routing_instance' => \Benchmark_Routing\HackRouting_Instance::class,
-
-        'fast_mark_instance' => \Benchmark_Routing\FastRoute_MarkBased_Instance::class,
-        'fast_group_pos_instance' => \Benchmark_Routing\FastRoute_GroupPosBased_Instance::class,
-        'fast_char_count_instance' => \Benchmark_Routing\FastRoute_CharCountBased_Instance::class,
-        'fast_group_count_instance' => \Benchmark_Routing\FastRoute_GroupCountBased_Instance::class,
+        'symfony:instance' => Symfony\SymfonyInstance::class,
+        'hack-routing:instance' => HackRouting\HackRoutingInstance::class,
+        'fast-route:dispatcher(mark_cached):instance' => FastRoute\FastRouteMarkBasedInstance::class,
+        'fast-route:dispatcher(group_pos_cached):instance' => FastRoute\FastRouteGroupPosBasedInstance::class,
+        'fast-route:dispatcher(char_count_cached):instance' => FastRoute\FastRouteCharCountBasedInstance::class,
+        'fast-route:dispatcher(group_count_cached):instance' => FastRoute\FastRouteGroupCountBasedInstance::class,
     );
 
-	const repeats = 300;
+    public const REPEATS = 300;
 
-	const scenario = array(
-		'benchAll' => [182, 2], /* total number of routes */
-		'benchLongest' => [1, self::repeats],
-		'benchLast' => [1, self::repeats],
-		);
+    public const scenario = [
+        'benchAll' => [182, 2], /* total number of routes */
+        'benchLongest' => [1, self::REPEATS],
+        'benchLast' => [1, self::REPEATS],
+    ];
 
-	function __construct($case, $scenario)
-	{
-		('' === $case)
-			? $this->all()
-			: $this->run($case, $scenario);
-	}
+    public static function main($case, $scenario): void
+    {
+        $benchmark = new self();
 
-	function all()
-	{
-		$output = new \Symfony\Component\Console\Output\ConsoleOutput();
-		$progressBar = new Symfony\Component\Console\Helper\ProgressBar(
-			$output, count(self::benchmark) * count(self::scenario)
-			);
+        ('' === $case)
+            ? $benchmark->all()
+            : $benchmark->run($case, $scenario);
+    }
 
-		$result = [];
-		foreach (self::benchmark as $case => $class)
-		{
-			foreach (self::scenario as $scenario => $revs)
-			{
-				$time = shell_exec("php -dopcache.jit=1235 -dopcache.enable_cli=1 -dopcache.enable=1 -dapc.enable=1 -dapc.enable_cli=1 " . __FILE__ . " {$case} {$scenario}");
-				$progressBar->advance();
+    public function all(): void
+    {
+        $output = new ConsoleOutput();
+        $progressBar = new ProgressBar(
+            $output,
+            count(self::BENCHMARKS) * count(self::scenario)
+        );
 
-				$result[] = array(
-					'case' => $case,
-					'scenario' => $scenario,
-					'time' => $time,
-					'repeats' => $revs[0] * $revs[1],
-					'per_second' => $revs[0] * $revs[1] / $time,
-					);
-			}
-		}
+        $result = [];
+        foreach (self::BENCHMARKS as $case => $class) {
+            foreach (self::scenario as $scenario => $revs) {
+                $time = Shell\execute("php", ["-dopcache.jit=1235",  "-dopcache.enable_cli=1", "-dopcache.enable=1", "-dapc.enable=1", "-dapc.enable_cli=1", __FILE__, $case, $scenario]);
+                $progressBar->advance();
 
-		$progressBar->finish();
-		$output->writeln('');
+                $result[] = array(
+                    'case' => $case,
+                    'scenario' => $scenario,
+                    'time' => $time,
+                    'repeats' => $revs[0] * $revs[1],
+                    'per_second' => $revs[0] * $revs[1] / $time,
+                );
+            }
+        }
 
-		usort($result, static function($a, $b)
-		{
-			return $b['per_second'] <=> $a['per_second'];
-		});
+        $progressBar->finish();
+        $output->writeln('');
 
-		$table = new \Symfony\Component\Console\Helper\Table($output);
-		$table->setHeaders(['Case', 'Scenario', 'Routes', 'Time', 'Per Second']);
+        usort($result, static function ($a, $b) {
+            return $b['per_second'] <=> $a['per_second'];
+        });
 
-		foreach ($result as $data)
-		{
-			$table->addRow([
-				$data['case'],
-				$data['scenario'],
-				$data['repeats'],
-				sprintf('%0.6f seconds', $data['time']),
-				$data['per_second']
-			]);
+        $table = new Table($output);
+        $table->setHeaders(['Case', 'Scenario', 'Routes', 'Time', 'Per Second']);
 
-		}
-		$table->render();
-	}
+        foreach ($result as $data) {
+            $table->addRow([
+                $data['case'],
+                $data['scenario'],
+                $data['repeats'],
+                sprintf('%0.6f seconds', $data['time']),
+                $data['per_second']
+            ]);
+        }
+        $table->render();
+    }
 
-	function run($case, $scenario)
-	{
-		$class = self::benchmark[ $case ];
-		$bench = new $class;
-		$repeats = self::scenario[ $scenario ][1];
+    public function run(string $case, string $scenario): void
+    {
+        $class = self::BENCHMARKS[$case];
+        $bench = new $class();
+        $repeats = self::scenario[$scenario][1];
 
-		$start = microtime(true);
-		for ($i = 0; $i < $repeats; $i++)
-		{
-			$this->$scenario($bench);
+        $start = microtime(true);
+        for ($i = 0; $i < $repeats; $i++) {
+            $this->$scenario($bench);
+        }
 
-		}
+        echo microtime(true) - $start;
+    }
 
-		echo microtime(true) - $start;
-	}
+    public function benchAll(Benchmark $bench): void
+    {
+        $bench->benchAll();
+    }
 
-	function benchAll($bench)
-	{
-		$bench->benchAll();
-	}
+    public function benchLongest(Benchmark $bench): void
+    {
+        $bench->runRouting($bench->getLongestRoute()[0]['route']);
+    }
 
-	function benchLongest($bench)
-	{
-		$bench->runRouting( $bench->getLongestRoute()[0]['route'] );
-	}
-
-	function benchLast($bench)
-	{
-		$bench->runRouting( $bench->getLastRoute()[0]['route'] );
-	}
+    public function benchLast(Benchmark $bench): void
+    {
+        $bench->runRouting($bench->getLastRoute()[0]['route']);
+    }
 }
+
+QuickBenchmark::main($argv[1] ?? '', $argv[2] ?? '');

@@ -1,31 +1,55 @@
-name: Benchmark
+name: "benchmarks"
 
-on: [push, pull_request]
+on:
+  pull_request: ~
+  push: ~
 
 jobs:
-  tests:
-    name: Benchmark PHP Routing ${{ matrix.php }}
-    runs-on: ubuntu-latest
+  unit-tests:
+    name: "benchmarks"
+
+    runs-on: ${{ matrix.operating-system }}
+
     strategy:
-      fail-fast: false
       matrix:
-        php: [7.1, 7.2, 7.3, 7.4]
+        php-version:
+          - "8.0"
+        operating-system:
+          - "ubuntu-latest"
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: "checkout"
+        uses: "actions/checkout@v2"
 
-      - name: Set up PHP ${{ matrix.php }}
-        uses: shivammathur/setup-php@v2
+      - name: "installing PHP"
+        uses: "shivammathur/setup-php@v2"
         with:
-          php-version: ${{ matrix.php }}
-          coverage: xdebug
+          php-version: "${{ matrix.php-version }}"
+          ini-values: memory_limit=-1
+          tools: composer:v2, cs2pr
+          extensions: bcmath, mbstring, intl, sodium, json, opcache, apcu
+          coverage: none
 
-      - name: Install dependencies with Composer
-        uses: ramsey/composer-install@v1
+      - name: "caching dependencies"
+        uses: "actions/cache@v2"
+        with:
+          path: |
+            ~/.composer/cache
+            vendor
+          key: "php-${{ matrix.php-version }}"
+          restore-keys: "php-${{ matrix.php-version }}"
 
-      - name: Run phpbench
-        run: vendor/bin/phpbench run --report=aggregate
+      - name: "installing dependencies"
+        run: "composer install --no-interaction --no-progress --ignore-platform-req php"
 
-      - name: Quick Benchmark
+      - name: "running phpbench ( raw )"
+        run: php vendor/bin/phpbench run --report=default --group raw
+      
+      - name: "running phpbench ( cached )"
+        run: php vendor/bin/phpbench run --report=default --group cached
+      
+      - name: "running phpbench ( instance )"
+        run: php vendor/bin/phpbench run --report=default --group instance
+
+      - name: "running quick benchmarks"
         run: php scripts/quick-benchmark.php

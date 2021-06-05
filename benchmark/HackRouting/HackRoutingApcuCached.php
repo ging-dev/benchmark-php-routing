@@ -1,10 +1,12 @@
 <?php
 
-namespace Benchmark_Routing;
+namespace BenchmarkRouting\HackRouting;
 
 use HackRouting\Cache\ApcuCache;
+use PhpBench\Attributes as Bench;
 
-class HackRouting_ApcuCached extends HackRouting_Abstract
+#[Bench\Groups(['hack-routing', 'cached'])]
+final class HackRoutingApcuCached extends AbstractHackRoutingCached
 {
     public function __construct()
     {

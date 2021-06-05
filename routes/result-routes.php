@@ -1,7 +1,4 @@
-<?php 
-
-return array(
-	['route' => '/addon', 'result' => ['_route' => 'addon']],
+<?php return array(['route' => '/addon', 'result' => ['_route' => 'addon']],
 	['route' => '/addon/linkers', 'result' => ['_route' => 'addon_linkers']],
 	['route' => '/addon/linkers/john', 'result' => ['_route' => 'addon_linkers_linker_key', 'linker_key' => 'john']],
 	['route' => '/addon/linkers/paul/values', 'result' => ['_route' => 'addon_linkers_linker_key_values', 'linker_key' => 'paul']],
@@ -182,5 +179,4 @@ return array(
 	['route' => '/workspaces/john/pipelines-config/variables/paul', 'result' => ['_route' => 'workspaces_workspace_pipelines_config_variables_variable_uuid', 'workspace' => 'john', 'variable_uuid' => 'paul']],
 	['route' => '/workspaces/george/projects', 'result' => ['_route' => 'workspaces_workspace_projects', 'workspace' => 'george']],
 	['route' => '/workspaces/ringo/projects/john', 'result' => ['_route' => 'workspaces_workspace_projects_project_key', 'workspace' => 'ringo', 'project_key' => 'john']],
-	['route' => '/workspaces/paul/search/code', 'result' => ['_route' => 'workspaces_workspace_search_code', 'workspace' => 'paul']]
-);
+	['route' => '/workspaces/paul/search/code', 'result' => ['_route' => 'workspaces_workspace_search_code', 'workspace' => 'paul']]);

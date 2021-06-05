@@ -1,39 +1,45 @@
 <?php
 
-namespace Benchmark_Routing;
+namespace BenchmarkRouting\FastRoute;
 
+use BenchmarkRouting\Benchmark;
 use FastRoute\RouteCollector;
+
 use function FastRoute\cachedDispatcher;
 use function FastRoute\simpleDispatcher;
 
-abstract class FastRoute_Abstract extends Benchmark
+abstract class AbstractFastRoute extends Benchmark
 {
-    protected $dataGeneratorClass;
-    protected $dispatcherClass;
-    protected $cache_file = null;
+    protected string $dataGeneratorClass;
+    protected string $dispatcherClass;
+    protected ?string $cache_file = null;
 
-    function runRouting(string $route): array
+    public function runRouting(string $route): array
     {
         if ($this->cache_file) {
             $dispatcher = cachedDispatcher(
-                [$this, 'loadRoutes'], [
+                [$this, 'loadRoutes'],
+                [
                 'dataGenerator' => $this->dataGeneratorClass,
                 'dispatcher' => $this->dispatcherClass,
                 'cacheFile' => $this->cache_file
-            ]);
+                ]
+            );
         } else {
             $dispatcher = simpleDispatcher(
-                [$this, 'loadRoutes'], [
+                [$this, 'loadRoutes'],
+                [
                 'dataGenerator' => $this->dataGeneratorClass,
                 'dispatcher' => $this->dispatcherClass
-            ]);
+                ]
+            );
         }
 
         return $dispatcher->dispatch('GET', $route)[1];
     }
 
-    function loadRoutes(RouteCollector $routes)
+    public function loadRoutes(RouteCollector $routes): void
     {
-        include __DIR__ . '/fastroute-routes.php';
+        include __DIR__ . '/../../routes/fastroute-routes.php';
     }
 }

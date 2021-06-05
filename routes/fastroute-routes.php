@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 $routes->addRoute('GET', '/addon', ['_route' => 'addon']);
 $routes->addRoute('GET', '/addon/linkers', ['_route' => 'addon_linkers']);

@@ -1,16 +1,14 @@
-<?php 
+<?php
 
-use HackRouting\{BaseRouter, HttpMethod};
+use HackRouting\BaseRouter;
+use HackRouting\HttpMethod;
+
+$cache = $cache ?? null;
 
 return new class($cache) extends BaseRouter {
-
-    /**
-    * @return iterable<non-empty-string, iterable<string, string>>
-    */
-    protected function getRoutes(): iterable
-    {
-        yield HttpMethod::GET => [
-
+   protected function getRoutes(): array { 
+       return [
+           HttpMethod::GET => [
             '/addon' => 'addon',
             '/addon/linkers' => 'addon_linkers',
             '/addon/linkers/{linker_key}' => 'addon_linkers_linker_key',
@@ -193,7 +191,7 @@ return new class($cache) extends BaseRouter {
             '/workspaces/{workspace}/projects' => 'workspaces_workspace_projects',
             '/workspaces/{workspace}/projects/{project_key}' => 'workspaces_workspace_projects_project_key',
             '/workspaces/{workspace}/search/code' => 'workspaces_workspace_search_code',
-
-        ];
-    }
+           ]
+       ];
+   }
 };

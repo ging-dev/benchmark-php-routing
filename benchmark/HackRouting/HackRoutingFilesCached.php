@@ -1,10 +1,12 @@
 <?php
 
-namespace Benchmark_Routing;
+namespace BenchmarkRouting\HackRouting;
 
 use HackRouting\Cache\FileCache;
+use PhpBench\Attributes as Bench;
 
-class HackRouting_FilesCached extends HackRouting_Abstract
+#[Bench\Groups(['hack-routing', 'cached'])]
+final class HackRoutingFilesCached extends AbstractHackRoutingCached
 {
     public function __construct()
     {
