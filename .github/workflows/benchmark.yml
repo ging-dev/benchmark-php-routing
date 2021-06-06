@@ -33,14 +33,5 @@ jobs:
       - name: "installing dependencies"
         run: "composer install --no-interaction --no-progress"
 
-      - name: "running phpbench ( raw )"
-        run: php vendor/bin/phpbench run --report=default --group raw
-      
-      - name: "running phpbench ( cached )"
-        run: php vendor/bin/phpbench run --report=default --group cached
-      
-      - name: "running phpbench ( instance )"
-        run: php vendor/bin/phpbench run --report=default --group instance
-
       - name: "running quick benchmarks"
         run: php scripts/quick-benchmark.php
