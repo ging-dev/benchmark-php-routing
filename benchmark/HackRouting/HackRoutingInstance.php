@@ -7,21 +7,22 @@ use HackRouting\AbstractMatcher;
 use HackRouting\BaseRouter;
 use HackRouting\Cache\MemoryCache;
 use HackRouting\HttpMethod;
+use HackRouting\Router;
 use PhpBench\Attributes as Bench;
 
 #[Bench\Groups(['hack-routing', 'instance'])]
 final class HackRoutingInstance extends Benchmark
 {
-    protected AbstractMatcher $matcher;
+    protected Router $router;
 
     public function __construct()
     {
         $cache = new MemoryCache();
 
-        $this->matcher = include __DIR__ . '/../../routes/hack-routes.php';
+        $this->router = include __DIR__ . '/../../routes/hack-routes.php';
 
         // trigger caching.
-        $this->matcher->getResolver();
+        $this->router->getResolver();
     }
 
     /**
@@ -31,6 +32,6 @@ final class HackRoutingInstance extends Benchmark
      */
     public function runRouting(string $route): array
     {
-        return $this->matcher->match(HttpMethod::GET, $route)[0];
+        return $this->router->match(HttpMethod::GET, $route)[0];
     }
 }

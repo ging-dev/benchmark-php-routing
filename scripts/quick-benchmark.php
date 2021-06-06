@@ -18,27 +18,27 @@ final class QuickBenchmark
         // uncached, router instance is created in each iteration from scratch.
         'symfony' => Symfony\Symfony::class,
         'hack-routing' => HackRouting\HackRouting::class,
-        'fast-route:dispatcher(mark)' => FastRoute\FastRouteMarkBased::class,
-        'fast-route:dispatcher(group_pos)' => FastRoute\FastRouteGroupPosBased::class,
-        'fast-route:dispatcher(char_count)' => FastRoute\FastRouteCharCountBased::class,
-        'fast-route:dispatcher(group_count)' => FastRoute\FastRouteGroupCountBased::class,
+        'fast-route(mark)' => FastRoute\FastRouteMarkBased::class,
+        'fast-route(group_pos)' => FastRoute\FastRouteGroupPosBased::class,
+        'fast-route(char_count)' => FastRoute\FastRouteCharCountBased::class,
+        'fast-route(group_count)' => FastRoute\FastRouteGroupCountBased::class,
 
         // router instance is created in each iteration using cache.
         'symfony:cached(file)' => Symfony\SymfonyCached::class,
         'hack-routing:cached(file)' => HackRouting\HackRoutingFilesCached::class,
         'hack-routing:cached(apcu)' => HackRouting\HackRoutingApcuCached::class,
-        'fast-route:dispatcher(mark):cached(file)' => FastRoute\FastRouteMarkBasedCached::class,
-        'fast-route:dispatcher(group_pos):cached(file)' => FastRoute\FastRouteGroupPosBasedCached::class,
-        'fast-route:dispatcher(char_count):cached(file)' => FastRoute\FastRouteCharCountBasedCached::class,
-        'fast-route:dispatcher(group_count):cached(file)' => FastRoute\FastRouteGroupCountBasedCached::class,
+        'fast-route(mark):cached(file)' => FastRoute\FastRouteMarkBasedCached::class,
+        'fast-route(group_pos):cached(file)' => FastRoute\FastRouteGroupPosBasedCached::class,
+        'fast-route(char_count):cached(file)' => FastRoute\FastRouteCharCountBasedCached::class,
+        'fast-route(group_count):cached(file)' => FastRoute\FastRouteGroupCountBasedCached::class,
 
         // router instance is only created once in the constructor, and kept in the memory.
-        // 'symfony:instance' => Symfony\SymfonyInstance::class,
-        // 'hack-routing:instance' => HackRouting\HackRoutingInstance::class,
-        // 'fast-route:dispatcher(mark):instance' => FastRoute\FastRouteMarkBasedInstance::class,
-        // 'fast-route:dispatcher(group_pos):instance' => FastRoute\FastRouteGroupPosBasedInstance::class,
-        // 'fast-route:dispatcher(char_count):instance' => FastRoute\FastRouteCharCountBasedInstance::class,
-        // 'fast-route:dispatcher(group_count):instance' => FastRoute\FastRouteGroupCountBasedInstance::class,
+        'symfony:instance' => Symfony\SymfonyInstance::class,
+        'hack-routing:instance' => HackRouting\HackRoutingInstance::class,
+        'fast-route(mark):instance' => FastRoute\FastRouteMarkBasedInstance::class,
+        'fast-route(group_pos):instance' => FastRoute\FastRouteGroupPosBasedInstance::class,
+        'fast-route(char_count):instance' => FastRoute\FastRouteCharCountBasedInstance::class,
+        'fast-route(group_count):instance' => FastRoute\FastRouteGroupCountBasedInstance::class,
     );
 
     public const REPEATS = 300;

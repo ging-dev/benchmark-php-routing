@@ -119,50 +119,92 @@ Here are the results from the benchmarks executed by GitHub Actions:
 
 https://github.com/kktsvetkov/benchmark-php-routing/actions
 
-## PHP 8.0 ( Opcache + JIT Compiler ):
+## Cached - PHP 8.0 ( Opcache + JIT Compiler ):
+
+> Represents a production environment when using a traditional web server with PHP fpm/fast-cgi
 
 ```sh
-+-------------------------------------------------+--------------+--------+------------------+-----------------+
-| Case                                            | Scenario     | Routes | Time             | Per Second      |
-+-------------------------------------------------+--------------+--------+------------------+-----------------+
-| fast-route:dispatcher(char_count):cached(file)  | benchAll     | 364    | 0.007986 seconds | 45580.733124347 |
-| fast-route:dispatcher(group_count):cached(file) | benchAll     | 364    | 0.008950 seconds | 40670.413596526 |
-| fast-route:dispatcher(mark):cached(file)        | benchAll     | 364    | 0.009015 seconds | 40377.843907857 |
-| fast-route:dispatcher(group_pos):cached(file)   | benchAll     | 364    | 0.009015 seconds | 40376.776049931 |
-| fast-route:dispatcher(char_count):cached(file)  | benchLast    | 300    | 0.008489 seconds | 35340.294902401 |
-| fast-route:dispatcher(group_count):cached(file) | benchLast    | 300    | 0.008904 seconds | 33692.797086703 |
-| fast-route:dispatcher(group_pos):cached(file)   | benchLast    | 300    | 0.009038 seconds | 33193.289015511 |
-| fast-route:dispatcher(mark):cached(file)        | benchLast    | 300    | 0.009958 seconds | 30126.444322072 |
-| fast-route:dispatcher(char_count):cached(file)  | benchLongest | 300    | 0.057436 seconds | 5223.2059243516 |
-| fast-route:dispatcher(mark):cached(file)        | benchLongest | 300    | 0.060576 seconds | 4952.4595196675 |
-| fast-route:dispatcher(group_count):cached(file) | benchLongest | 300    | 0.062500 seconds | 4800            |
-| hack-routing:cached(apcu)                       | benchLast    | 300    | 0.064002 seconds | 4687.3682681239 |
-| hack-routing:cached(file)                       | benchLast    | 300    | 0.064103 seconds | 4679.9763451818 |
-| hack-routing:cached(file)                       | benchAll     | 364    | 0.078031 seconds | 4664.8089316378 |
-| fast-route:dispatcher(group_pos):cached(file)   | benchLongest | 300    | 0.064484 seconds | 4652.3082383738 |
-| hack-routing:cached(apcu)                       | benchAll     | 364    | 0.081533 seconds | 4464.4524320562 |
-| hack-routing:cached(apcu)                       | benchLongest | 300    | 0.120206 seconds | 2495.7132458384 |
-| hack-routing:cached(file)                       | benchLongest | 300    | 0.129106 seconds | 2323.6712156746 |
-| symfony:cached(file)                            | benchLast    | 300    | 0.282813 seconds | 1060.7722286995 |
-| symfony:cached(file)                            | benchAll     | 364    | 0.351659 seconds | 1035.0934808622 |
-| fast-route:dispatcher(group_pos)                | benchAll     | 364    | 0.362540 seconds | 1004.0271234504 |
-| fast-route:dispatcher(mark)                     | benchAll     | 364    | 0.367742 seconds | 989.82422190555 |
-| fast-route:dispatcher(group_pos)                | benchLast    | 300    | 0.307105 seconds | 976.86438546315 |
-| fast-route:dispatcher(group_count)              | benchLast    | 300    | 0.311405 seconds | 963.37584323729 |
-| fast-route:dispatcher(char_count)               | benchAll     | 364    | 0.395301 seconds | 920.8176153128  |
-| fast-route:dispatcher(group_count)              | benchAll     | 364    | 0.397550 seconds | 915.60785536684 |
-| fast-route:dispatcher(char_count)               | benchLast    | 300    | 0.330377 seconds | 908.05324665766 |
-| fast-route:dispatcher(mark)                     | benchLast    | 300    | 0.335990 seconds | 892.88321051343 |
-| symfony:cached(file)                            | benchLongest | 300    | 0.348710 seconds | 860.31357941632 |
-| fast-route:dispatcher(mark)                     | benchLongest | 300    | 0.367863 seconds | 815.52112896965 |
-| fast-route:dispatcher(char_count)               | benchLongest | 300    | 0.371169 seconds | 808.25747770258 |
-| fast-route:dispatcher(group_pos)                | benchLongest | 300    | 0.373890 seconds | 802.37468347651 |
-| symfony                                         | benchAll     | 364    | 0.465045 seconds | 782.71999343772 |
-| fast-route:dispatcher(group_count)              | benchLongest | 300    | 0.391357 seconds | 766.56316194438 |
-| symfony                                         | benchLongest | 300    | 0.406701 seconds | 737.64291455113 |
-| symfony                                         | benchLast    | 300    | 0.574142 seconds | 522.51862131856 |
-| hack-routing                                    | benchLast    | 300    | 2.307287 seconds | 130.02282416137 |
-| hack-routing                                    | benchAll     | 364    | 2.820049 seconds | 129.0757692057  |
-| hack-routing                                    | benchLongest | 300    | 2.434096 seconds | 123.24904905685 |
-+-------------------------------------------------+--------------+--------+------------------+-----------------+
++--------------------------------------+--------------+--------+------------------+-----------------+
+| Case                                 | Scenario     | Routes | Time             | Per Second      |
++--------------------------------------+--------------+--------+------------------+-----------------+
+| fast-route(char_count):cached(file)  | benchAll     | 364    | 0.005159 seconds | 70557.660412238 |
+| fast-route(group_count):cached(file) | benchAll     | 364    | 0.005534 seconds | 65775.996553358 |
+| fast-route(mark):cached(file)        | benchAll     | 364    | 0.005814 seconds | 62606.686459444 |
+| fast-route(char_count):cached(file)  | benchLast    | 300    | 0.005014 seconds | 59830.307641101 |
+| fast-route(group_pos):cached(file)   | benchAll     | 364    | 0.006179 seconds | 58910.582497299 |
+| fast-route(group_count):cached(file) | benchLast    | 300    | 0.005349 seconds | 56086.079786048 |
+| fast-route(group_pos):cached(file)   | benchLast    | 300    | 0.005434 seconds | 55207.581607582 |
+| fast-route(mark):cached(file)        | benchLast    | 300    | 0.005588 seconds | 53688.236549047 |
+| fast-route(group_count):cached(file) | benchLongest | 300    | 0.053454 seconds | 5612.3103272941 |
+| fast-route(group_pos):cached(file)   | benchLongest | 300    | 0.066180 seconds | 4533.0922007789 |
+| fast-route(char_count):cached(file)  | benchLongest | 300    | 0.066930 seconds | 4482.2912102592 |
+| fast-route(mark):cached(file)        | benchLongest | 300    | 0.068012 seconds | 4410.9863529445 |
+| hack-routing:cached(apcu)            | benchAll     | 364    | 0.100586 seconds | 3618.7961165049 |
+| hack-routing:cached(apcu)            | benchLast    | 300    | 0.085904 seconds | 3492.265506178  |
+| hack-routing:cached(file)            | benchLast    | 300    | 0.108952 seconds | 2753.5110082128 |
+| hack-routing:cached(file)            | benchAll     | 364    | 0.143426 seconds | 2537.8951413961 |
+| hack-routing:cached(apcu)            | benchLongest | 300    | 0.137411 seconds | 2183.2332482567 |
+| hack-routing:cached(file)            | benchLongest | 300    | 0.191708 seconds | 1564.8792038623 |
+| symfony:cached(file)                 | benchAll     | 364    | 0.309186 seconds | 1177.2849400842 |
+| symfony:cached(file)                 | benchLast    | 300    | 0.272055 seconds | 1102.7185624859 |
+| symfony:cached(file)                 | benchLongest | 300    | 0.305826 seconds | 980.95011643163 |
++--------------------------------------+--------------+--------+------------------+-----------------+
+```
+
+## Instances - PHP 8.0 ( Opcache + JIT Compiler ):
+
+> Represents a production environment when using a long-running-process server such as Amphp, ReactPHP, Roadrunner, etc.
+
+```sh
++----------------------------------+--------------+--------+------------------+-----------------+
+| Case                             | Scenario     | Routes | Time             | Per Second      |
++----------------------------------+--------------+--------+------------------+-----------------+
+| symfony:instance                 | benchAll     | 364    | 0.001548 seconds | 235134.24549516 |
+| hack-routing:instance            | benchLast    | 300    | 0.001429 seconds | 209925.12512512 |
+| symfony:instance                 | benchLast    | 300    | 0.001493 seconds | 200940.78569147 |
+| fast-route(group_pos):instance   | benchAll     | 364    | 0.003255 seconds | 111823.53006665 |
+| fast-route(group_count):instance | benchAll     | 364    | 0.003560 seconds | 102252.13689639 |
+| fast-route(mark):instance        | benchAll     | 364    | 0.003910 seconds | 93093.088780488 |
+| fast-route(mark):instance        | benchLast    | 300    | 0.003258 seconds | 92081.317233808 |
+| fast-route(char_count):instance  | benchAll     | 364    | 0.003985 seconds | 91344.181883451 |
+| hack-routing:instance            | benchAll     | 364    | 0.004190 seconds | 86874.16956868  |
+| fast-route(char_count):instance  | benchLast    | 300    | 0.003669 seconds | 81765.624796934 |
+| fast-route(group_pos):instance   | benchLast    | 300    | 0.004048 seconds | 74108.675422581 |
+| fast-route(group_count):instance | benchLast    | 300    | 0.004202 seconds | 71392.408510639 |
+| hack-routing:instance            | benchLongest | 300    | 0.050399 seconds | 5952.491378454  |
+| fast-route(group_count):instance | benchLongest | 300    | 0.054269 seconds | 5528.0344433705 |
+| fast-route(mark):instance        | benchLongest | 300    | 0.063621 seconds | 4715.4208794585 |
+| fast-route(char_count):instance  | benchLongest | 300    | 0.063861 seconds | 4697.710676045  |
+| fast-route(group_pos):instance   | benchLongest | 300    | 0.066711 seconds | 4497.0129303875 |
+| symfony:instance                 | benchLongest | 300    | 0.076024 seconds | 3946.1193973682 |
++----------------------------------+--------------+--------+------------------+-----------------+
+```
+
+## Raw ( No Caching ) - PHP 8.0 ( Opcache + JIT Compiler ):
+
+> Represents development environment
+
+```sh
++-------------------------+--------------+--------+------------------+-----------------+
+| Case                    | Scenario     | Routes | Time             | Per Second      |
++-------------------------+--------------+--------+------------------+-----------------+
+| fast-route(group_count) | benchAll     | 364    | 0.326975 seconds | 1113.2354035782 |
+| fast-route(group_pos)   | benchAll     | 364    | 0.333525 seconds | 1091.3726493222 |
+| fast-route(group_pos)   | benchLast    | 300    | 0.276078 seconds | 1086.6494811975 |
+| fast-route(mark)        | benchLast    | 300    | 0.283820 seconds | 1057.0073956594 |
+| fast-route(char_count)  | benchAll     | 364    | 0.346364 seconds | 1050.917467214  |
+| fast-route(mark)        | benchAll     | 364    | 0.350720 seconds | 1037.8644688371 |
+| fast-route(char_count)  | benchLast    | 300    | 0.293362 seconds | 1022.6268438376 |
+| fast-route(group_count) | benchLast    | 300    | 0.309721 seconds | 968.6137095632  |
+| fast-route(group_pos)   | benchLongest | 300    | 0.319131 seconds | 940.05313283508 |
+| fast-route(char_count)  | benchLongest | 300    | 0.330630 seconds | 907.35850321937 |
+| fast-route(group_count) | benchLongest | 300    | 0.357817 seconds | 838.41755658509 |
+| fast-route(mark)        | benchLongest | 300    | 0.363120 seconds | 826.17298606204 |
+| symfony                 | benchAll     | 364    | 0.475975 seconds | 764.74637181343 |
+| symfony                 | benchLongest | 300    | 0.411902 seconds | 728.32866994435 |
+| symfony                 | benchLast    | 300    | 0.661517 seconds | 453.50314981999 |
+| hack-routing            | benchLast    | 300    | 2.573421 seconds | 116.57633936802 |
+| hack-routing            | benchAll     | 364    | 3.208348 seconds | 113.45402554116 |
+| hack-routing            | benchLongest | 300    | 2.650159 seconds | 113.20074997483 |
++-------------------------+--------------+--------+------------------+-----------------+
 ```

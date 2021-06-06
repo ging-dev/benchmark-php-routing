@@ -14,7 +14,7 @@ abstract class Benchmark
     abstract public function runRouting(string $route): array;
 
     #[Bench\Revs(100), Bench\Iterations(5), Bench\ParamProviders("getLastRoute"), Bench\Groups(['last'])]
-    public function benchLast(array $last)
+    public function benchLast(array $last): void
     {
         $this->runRoute($last['route'], $last['result']);
     }
@@ -28,7 +28,7 @@ abstract class Benchmark
     }
 
     #[Bench\Revs(100), Bench\Iterations(5), Bench\ParamProviders("getLongestRoute"), Bench\Groups(['longest'])]
-    public function benchLongest(array $longest)
+    public function benchLongest(array $longest): void
     {
         $this->runRoute($longest['route'], $longest['result']);
     }
@@ -44,8 +44,8 @@ abstract class Benchmark
         return array($longest);
     }
 
-    #[Bench\Revs(10), Bench\Iterations(1), Bench\Groups(['all'])]
-    public function benchAll()
+    #[Bench\Revs(4), Bench\Iterations(5), Bench\Groups(['all'])]
+    public function benchAll(): void
     {
         $routes = $this->getRoutes();
         foreach ($routes as $params) {
@@ -53,7 +53,7 @@ abstract class Benchmark
         }
     }
 
-    public function runRoute($route, array $result)
+    public function runRoute($route, array $result): void
     {
         $match = $this->runRouting($route);
         assert($match['_route'] === $result['_route']);
