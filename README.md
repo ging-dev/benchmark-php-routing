@@ -104,7 +104,7 @@ You can see the list of paths in [bitbucket-routes.txt](routes/bitbucket-routes.
 
 # Scripts
 
-There are a few scripts to assist with some of the grunt work:
+There are a few scripts to assist with some grunt work:
 
 * [scripts/download-bitbucket-routes.php](scripts/download-bitbucket-routes.php):
 	downloads the path definitions from [Bitbucket API](https://developer.atlassian.com/bitbucket/api/2/reference/resource/) page
@@ -117,7 +117,7 @@ There are a few scripts to assist with some of the grunt work:
 
 Here are the results from the benchmarks executed by GitHub Actions:
 
-https://github.com/kktsvetkov/benchmark-php-routing/actions
+https://github.com/azjezz/benchmark-php-routing/actions
 
 ## Cached - PHP 8.0 ( Opcache + JIT Compiler ):
 
