@@ -24,6 +24,8 @@ abstract class AbstractFastRouteInstance extends Benchmark
             ]
         );
         
+        // warmup.
+        $this->benchAll();
     }
 
     public function runRouting(string $route): array

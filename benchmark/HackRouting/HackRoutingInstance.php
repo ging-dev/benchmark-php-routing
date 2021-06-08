@@ -21,8 +21,8 @@ final class HackRoutingInstance extends Benchmark
 
         $this->router = include __DIR__ . '/../../routes/hack-routes.php';
 
-        // trigger caching.
-        $this->router->getResolver();
+        // warmup
+        $this->benchAll();
     }
 
     /**

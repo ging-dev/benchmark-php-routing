@@ -19,6 +19,9 @@ final class SymfonyInstance extends Benchmark
         $dumper = new CompiledUrlMatcherDumper($this->loadedRoutes());
         $compiled = $dumper->getCompiledRoutes();
         $this->matcher = new CompiledUrlMatcher($compiled, new RequestContext());
+
+        // warmup.
+        $this->benchAll();
     }
 
     public function runRouting(string $route): array
