@@ -122,7 +122,7 @@ final class QuickBenchmark
 
     public function run(?string $group, ?string $case, ?string $scenario): void
     {
-        $start = microtime(true);
+        $routers = [];
         foreach (self::BENCHMARKS as $benchmark_group => $benchmarks) {
             if ($group && $benchmark_group !== $group) {
                 continue;
@@ -142,11 +142,16 @@ final class QuickBenchmark
                     $bench = new $class();
 
                     for ($i = 0; $i < $repeats; $i++) {
-                        $this->$scenario_name($bench);
+                        $routers[] = fn() => $this->$scenario_name($bench);
                     }
 
                 }
             }
+        }
+
+        $start = microtime(true);
+        foreach ($routers as $router) {
+            $router();
         }
 
         echo microtime(true) - $start;
