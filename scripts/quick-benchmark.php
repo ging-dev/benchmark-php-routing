@@ -81,7 +81,7 @@ final class QuickBenchmark
 
             foreach ($benchmark as $case => $class) {
                 foreach (self::scenario as $scenario => $revs) {
-                    $time = Shell\execute("php", ["-dopcache.jit=1235", "-dopcache.enable_cli=1", "-dopcache.enable=1", "-dapc.enable=1", "-dapc.enable_cli=1", __FILE__, '--case='.$case, '--scenario='.$scenario, '--group='.$benchmark_group]);
+                    $time = Shell\execute("php", ["-dopcache.jit=1235", "-dopcache.enable_cli=1", "-dopcache.enable=1", "-dapc.enable=1", "-dapc.enable_cli=1", __FILE__, '--case=' . $case, '--scenario=' . $scenario, '--group=' . $benchmark_group]);
                     $progressBar->advance();
 
                     $results[$benchmark_group][] = array(
@@ -122,27 +122,34 @@ final class QuickBenchmark
 
     public function run(?string $group, ?string $case, ?string $scenario): void
     {
+        $start = microtime(true);
         foreach (self::BENCHMARKS as $benchmark_group => $benchmarks) {
             if ($group && $benchmark_group !== $group) {
                 continue;
             }
 
-            foreach (self::scenario as $scenario_name => [$_, $repeats]) {
-                if ($scenario && $scenario_name !== $scenario) {
+            foreach ($benchmarks as $benchmark_case => $benchmark_scenario) {
+                if ($case && $benchmark_case !== $case) {
                     continue;
                 }
 
-                $class = $benchmarks[$case];
-                $bench = new $class();
+                foreach (self::scenario as $scenario_name => [$_, $repeats]) {
+                    if ($scenario && $scenario_name !== $scenario) {
+                        continue;
+                    }
 
-                $start = microtime(true);
-                for ($i = 0; $i < $repeats; $i++) {
-                    $this->$scenario($bench);
+                    $class = $benchmarks[$case];
+                    $bench = new $class();
+
+                    for ($i = 0; $i < $repeats; $i++) {
+                        $this->$scenario_name($bench);
+                    }
+
                 }
-
-                echo microtime(true) - $start;
             }
         }
+
+        echo microtime(true) - $start;
     }
 
     public function benchAll(Benchmark $bench): void
