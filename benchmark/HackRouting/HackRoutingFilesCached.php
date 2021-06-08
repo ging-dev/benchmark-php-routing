@@ -10,7 +10,7 @@ final class HackRoutingFilesCached extends AbstractHackRoutingCached
 {
     public function __construct()
     {
-        $cache = new FileCache();
+        $cache = new FileCache(__DIR__ . '/../../cache');
         // call getResolver() to trigger cache
         $this->loadedRoutes($cache)->getResolver();
 

@@ -14,6 +14,6 @@ final class FastRouteCharCountBasedCached extends AbstractFastRoute
 
     public function __construct()
     {
-        $this->cache_file = sys_get_temp_dir() . '/fast-route-char-count-based.php';
+        $this->cache_file = __DIR__ . '/../../cache/fast-route-char-count-based.php';
     }
 }

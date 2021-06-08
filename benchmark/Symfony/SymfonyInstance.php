@@ -3,34 +3,31 @@
 namespace BenchmarkRouting\Symfony;
 
 use BenchmarkRouting\Benchmark;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\FileLoader;
+use Symfony\Component\Routing\Loader\PhpFileLoader;
 use Symfony\Component\Routing\Matcher\CompiledUrlMatcher;
 use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use PhpBench\Attributes as Bench;
+use Symfony\Component\Routing\Router;
 
 #[Bench\Groups(['symfony', 'instance'])]
 final class SymfonyInstance extends Benchmark
 {
-    protected CompiledUrlMatcher $matcher;
+    protected Router $router;
 
     public function __construct()
     {
-        $dumper = new CompiledUrlMatcherDumper($this->loadedRoutes());
-        $compiled = $dumper->getCompiledRoutes();
-        $this->matcher = new CompiledUrlMatcher($compiled, new RequestContext());
-
+        $this->router = new Router(new PhpFileLoader(new FileLocator(__DIR__ . '/../../routes/')), 'symfony-routes.php');
+        
         // warmup.
         $this->benchAll();
     }
 
     public function runRouting(string $route): array
     {
-        return $this->matcher->match($route);
-    }
-
-    public function loadedRoutes(): RouteCollection
-    {
-        return include __DIR__ . '/../../routes/symfony-routes.php';
+        return $this->router->match($route);
     }
 }
