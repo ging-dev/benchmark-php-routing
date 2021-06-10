@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/azjezz/hack-routing.git",
-                "reference": "7243f7036e8e42ec23f8dc0c9025ed9c5e9ea426"
+                "reference": "3794d8092ba3f3876af68a4f6c3bce9e0f9e852e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/azjezz/hack-routing/zipball/7243f7036e8e42ec23f8dc0c9025ed9c5e9ea426",
-                "reference": "7243f7036e8e42ec23f8dc0c9025ed9c5e9ea426",
+                "url": "https://api.github.com/repos/azjezz/hack-routing/zipball/3794d8092ba3f3876af68a4f6c3bce9e0f9e852e",
+                "reference": "3794d8092ba3f3876af68a4f6c3bce9e0f9e852e",
                 "shasum": ""
             },
             "require": {
@@ -68,7 +68,7 @@
                 "issues": "https://github.com/azjezz/hack-routing/issues",
                 "source": "https://github.com/azjezz/hack-routing/tree/main"
             },
-            "time": "2021-06-08T18:06:02+00:00"
+            "time": "2021-06-10T18:37:50+00:00"
         },
         {
             "name": "azjezz/psl",
