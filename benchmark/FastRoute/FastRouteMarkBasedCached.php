@@ -14,6 +14,6 @@ final class FastRouteMarkBasedCached extends AbstractFastRoute
 
     public function __construct()
     {
-        $this->cache_file = sys_get_temp_dir() . '/fast-route-mark-based.php';
+        $this->cacheKey = sys_get_temp_dir() . '/fast-route-mark-based.php';
     }
 }

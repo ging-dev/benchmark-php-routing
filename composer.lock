@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8c6e3ab8ee8c2d744a7b3a5c20087d9f",
+    "content-hash": "7ea540f382568a4fb398436a6036e157",
     "packages": [
         {
             "name": "azjezz/hack-routing",
@@ -281,25 +281,40 @@
         },
         {
             "name": "nikic/fast-route",
-            "version": "v1.3.0",
+            "version": "dev-introduce-cache-drivers",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/FastRoute.git",
-                "reference": "181d480e08d9476e61381e04a71b34dc0432e812"
+                "reference": "a53d5636b4c35acc2444da64b7b3d8dfd09a6386"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/FastRoute/zipball/181d480e08d9476e61381e04a71b34dc0432e812",
-                "reference": "181d480e08d9476e61381e04a71b34dc0432e812",
+                "url": "https://api.github.com/repos/nikic/FastRoute/zipball/a53d5636b4c35acc2444da64b7b3d8dfd09a6386",
+                "reference": "a53d5636b4c35acc2444da64b7b3d8dfd09a6386",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0"
+                "php": ">=7.4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35|~5.7"
+                "doctrine/coding-standard": "^9.0",
+                "phpbench/phpbench": "^1.0",
+                "phpstan/extension-installer": "^1.0",
+                "phpstan/phpstan": "^0.12",
+                "phpstan/phpstan-deprecation-rules": "^0.12",
+                "phpstan/phpstan-phpunit": "^0.12",
+                "phpstan/phpstan-strict-rules": "^0.12",
+                "phpunit/phpunit": "^9.5"
+            },
+            "suggest": {
+                "ext-apcu": "To be able to use APCu cache driver"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "FastRoute\\": "src/"
@@ -325,9 +340,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/FastRoute/issues",
-                "source": "https://github.com/nikic/FastRoute/tree/master"
+                "source": "https://github.com/nikic/FastRoute/tree/introduce-cache-drivers"
             },
-            "time": "2018-02-13T20:26:39+00:00"
+            "time": "2021-06-15T20:22:22+00:00"
         },
         {
             "name": "phpbench/container",
@@ -2210,6 +2225,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "nikic/fast-route": 20,
         "azjezz/hack-routing": 20
     },
     "prefer-stable": false,
@@ -2219,5 +2235,5 @@
         "ext-apcu": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
