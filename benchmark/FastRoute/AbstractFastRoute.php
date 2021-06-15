@@ -12,17 +12,19 @@ abstract class AbstractFastRoute extends Benchmark
 {
     protected string $dataGeneratorClass;
     protected string $dispatcherClass;
-    protected ?string $cache_file = null;
+    protected ?string $cacheKey = null;
+    protected ?string $cacheDriver = null;
 
     public function runRouting(string $route): array
     {
-        if ($this->cache_file) {
+        if ($this->cacheKey && $this->cacheDriver) {
             $dispatcher = cachedDispatcher(
                 [$this, 'loadRoutes'],
                 [
                 'dataGenerator' => $this->dataGeneratorClass,
                 'dispatcher' => $this->dispatcherClass,
-                'cacheFile' => $this->cache_file
+                'cacheDriver' => $this->cacheDriver,
+                'cacheKey' => $this->cacheKey,
                 ]
             );
         } else {
