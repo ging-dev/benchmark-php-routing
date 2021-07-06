@@ -22,7 +22,7 @@ while ($r = fgets($fp)) {
     $name = trim($name, '_');
 
     // $routes->add('workspaces', new Route('/workspaces'));
-    $symfony[] = "\$routes->add('{$name}', new Symfony\Component\Routing\Route('{$r}'));";
+    $symfony[] = "\$routes->add('{$name}', new Symfony\Component\Routing\Route('{$r}', methods: ['GET']));";
 
     // $routes->addRoute('GET', '/addon', ['_route' => 'addon']);
     $fast[] = "\$routes->addRoute('GET', '{$r}', ['_route' => '{$name}']);";

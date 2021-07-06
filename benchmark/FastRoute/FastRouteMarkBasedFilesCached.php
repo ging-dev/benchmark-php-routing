@@ -17,5 +17,7 @@ final class FastRouteMarkBasedFilesCached extends AbstractFastRoute
     {
         $this->cacheDriver = FileCache::class;
         $this->cacheKey = __DIR__ . '/../../cache/fast-route-mark-based.php';
+
+        $this->createDispatcher();
     }
 }

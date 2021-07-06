@@ -16,11 +16,11 @@ abstract class AbstractHackRoutingCached extends Benchmark
      * @throws \HackRouting\HttpException\InternalServerErrorException
      * @throws \HackRouting\HttpException\NotFoundException
      */
-    public function runRouting(string $route): array
+    public function runRouting(string $route, string $method = 'GET'): array
     {
         $matcher = $this->loadedRoutes($this->cache);
 
-        return $matcher->match(HttpMethod::GET, $route)[0];
+        return $matcher->match($method, $route)[0];
     }
 
     public function loadedRoutes(CacheInterface $cache = null): Router

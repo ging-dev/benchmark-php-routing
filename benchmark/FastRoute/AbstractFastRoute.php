@@ -3,6 +3,7 @@
 namespace BenchmarkRouting\FastRoute;
 
 use BenchmarkRouting\Benchmark;
+use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 
 use function FastRoute\cachedDispatcher;
@@ -15,29 +16,34 @@ abstract class AbstractFastRoute extends Benchmark
     protected ?string $cacheKey = null;
     protected ?string $cacheDriver = null;
 
-    public function runRouting(string $route): array
+    public function runRouting(string $route, string $method = 'GET'): array
+    {
+        $dispatcher = $this->createDispatcher();
+
+        return $dispatcher->dispatch($method, $route)[1];
+    }
+
+    protected function createDispatcher(): Dispatcher
     {
         if ($this->cacheKey && $this->cacheDriver) {
-            $dispatcher = cachedDispatcher(
+            return cachedDispatcher(
                 [$this, 'loadRoutes'],
                 [
-                'dataGenerator' => $this->dataGeneratorClass,
-                'dispatcher' => $this->dispatcherClass,
-                'cacheDriver' => $this->cacheDriver,
-                'cacheKey' => $this->cacheKey,
-                ]
-            );
-        } else {
-            $dispatcher = simpleDispatcher(
-                [$this, 'loadRoutes'],
-                [
-                'dataGenerator' => $this->dataGeneratorClass,
-                'dispatcher' => $this->dispatcherClass
+                    'dataGenerator' => $this->dataGeneratorClass,
+                    'dispatcher' => $this->dispatcherClass,
+                    'cacheDriver' => $this->cacheDriver,
+                    'cacheKey' => $this->cacheKey,
                 ]
             );
         }
 
-        return $dispatcher->dispatch('GET', $route)[1];
+        return simpleDispatcher(
+            [$this, 'loadRoutes'],
+            [
+                'dataGenerator' => $this->dataGeneratorClass,
+                'dispatcher' => $this->dispatcherClass
+            ]
+        );
     }
 
     public function loadRoutes(RouteCollector $routes): void
