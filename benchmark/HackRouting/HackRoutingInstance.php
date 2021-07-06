@@ -30,8 +30,8 @@ final class HackRoutingInstance extends Benchmark
      * @throws \HackRouting\HttpException\InternalServerErrorException
      * @throws \HackRouting\HttpException\NotFoundException
      */
-    public function runRouting(string $route): array
+    public function runRouting(string $route, string $method = 'GET'): array
     {
-        return $this->router->match(HttpMethod::GET, $route)[0];
+        return $this->router->match($method, $route)[0];
     }
 }

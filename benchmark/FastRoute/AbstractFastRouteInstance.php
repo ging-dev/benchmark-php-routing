@@ -23,14 +23,14 @@ abstract class AbstractFastRouteInstance extends Benchmark
             'dispatcher' => $this->dispatcherClass
             ]
         );
-        
+
         // warmup.
         $this->benchAll();
     }
 
-    public function runRouting(string $route): array
+    public function runRouting(string $route, string $method = 'GET'): array
     {
-        return $this->dispatcher->dispatch('GET', $route)[1];
+        return $this->dispatcher->dispatch($method, $route)[1];
     }
 
     public function loadRoutes(RouteCollector $routes): void

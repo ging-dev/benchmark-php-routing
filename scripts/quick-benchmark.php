@@ -8,6 +8,7 @@ use Psl\Shell;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Throwable;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -45,6 +46,8 @@ final class QuickBenchmark
         'benchAll' => [182, 2], /* total number of routes */
         'benchLongest' => [1, self::REPEATS],
         'benchLast' => [1, self::REPEATS],
+        'benchInvalidMethod' => [1, self::REPEATS],
+        'benchInvalidRoute' => [1, self::REPEATS],
     ];
 
     public static function main($arguments): void
@@ -162,6 +165,24 @@ final class QuickBenchmark
     public function benchLast(Benchmark $bench): void
     {
         $bench->runRouting($bench->getLastRoute()[0]['route']);
+    }
+
+    public function benchInvalidMethod(Benchmark $bench): void
+    {
+        try {
+            $bench->runRouting($bench->getLastRoute()[0]['route'], 'DELETE');
+        } catch (Throwable $e) {
+            // ignore
+        }
+    }
+
+    public function benchInvalidRoute(Benchmark $bench): void
+    {
+        try {
+            $bench->runRouting('/a-route-that-does-not-exist-anywhere-and-will/never-be-matched');
+        } catch (Throwable $e) {
+            // ignore
+        }
     }
 }
 

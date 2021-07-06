@@ -10,11 +10,11 @@ use PhpBench\Attributes as Bench;
 #[Bench\Groups(['hack-routing', 'raw'])]
 final class HackRouting extends Benchmark
 {
-    public function runRouting(string $route): array
+    public function runRouting(string $route, string $method = 'GET'): array
     {
         $router = $this->loadedRoutes();
 
-        return $router->match(HttpMethod::GET, $route)[0];
+        return $router->match($method, $route)[0];
     }
 
     public function loadedRoutes(): Router

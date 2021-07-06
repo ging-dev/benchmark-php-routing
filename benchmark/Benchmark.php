@@ -4,6 +4,7 @@ namespace BenchmarkRouting;
 
 use PhpBench\Attributes as Bench;
 
+use Throwable;
 use function assert;
 
 /**
@@ -11,7 +12,7 @@ use function assert;
  */
 abstract class Benchmark
 {
-    abstract public function runRouting(string $route): array;
+    abstract public function runRouting(string $route, string $method = 'GET'): array;
 
     #[Bench\Revs(100), Bench\Iterations(5), Bench\ParamProviders("getLastRoute"), Bench\Groups(['last'])]
     public function benchLast(array $last): void
@@ -53,10 +54,23 @@ abstract class Benchmark
         }
     }
 
-    public function runRoute($route, array $result): void
+    #[Bench\Revs(4), Bench\Iterations(5), Bench\Groups(['invalid_method'])]
+    public function benchInvalidMethod(): void
     {
-        $match = $this->runRouting($route);
-        assert($match['_route'] === $result['_route']);
+        $routes = $this->getRoutes();
+        foreach ($routes as $params) {
+            $this->runRoute($params['route'], $params['result'], 'DELETE');
+        }
+    }
+
+    public function runRoute($route, array $result, string $method = 'GET'): void
+    {
+        try {
+            $match = $this->runRouting($route, $method);
+            assert($match['_route'] === $result['_route']);
+        } catch (Throwable $e) {
+            // ignore
+        }
     }
 
     public function getRoutes(): array

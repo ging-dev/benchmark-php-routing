@@ -16,11 +16,11 @@ abstract class AbstractFastRoute extends Benchmark
     protected ?string $cacheKey = null;
     protected ?string $cacheDriver = null;
 
-    public function runRouting(string $route): array
+    public function runRouting(string $route, string $method = 'GET'): array
     {
         $dispatcher = $this->createDispatcher();
 
-        return $dispatcher->dispatch('GET', $route)[1];
+        return $dispatcher->dispatch($method, $route)[1];
     }
 
     protected function createDispatcher(): Dispatcher
