@@ -17,5 +17,7 @@ final class FastRouteMarkBasedApcuCached extends AbstractFastRoute
     {
         $this->cacheDriver = ApcuCache::class;
         $this->cacheKey = 'fast-route-mark-based';
+
+        $this->createDispatcher();
     }
 }
