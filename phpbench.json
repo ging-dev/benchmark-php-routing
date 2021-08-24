@@ -3,6 +3,7 @@
   "runner.bootstrap": "vendor/autoload.php",
   "runner.output_mode": "time",
   "runner.time_unit": "milliseconds",
+  "runner.file_pattern": "*",
   "runner.php_config": {
     "opcache.enable": true,
     "opcache.enable_cli": true,
@@ -28,7 +29,6 @@
     }
   },
   "report.outputs": {
-    "table_style": ["borderless"],
     "sort": {
       "column": "mean"
     }

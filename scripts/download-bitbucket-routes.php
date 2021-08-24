@@ -2,7 +2,7 @@
 
 /* Downloads the path definitions from Bitbucket API */
 
-$txt = __DIR__ . '/../routes/bitbucket-routes.txt';
+$txt = __DIR__.'/../routes/bitbucket-routes.txt';
 $url = 'https://developer.atlassian.com/bitbucket/api/2/reference/resource/';
 
 $tmp = '/tmp/download-bitbucket-routes.html';
@@ -20,6 +20,6 @@ if (preg_match('~data\: (.+),\s+context\: ~Us', $html, $R)) {
 
 if ($routes) {
     printf("%d routes found.\n", count($routes));
-    file_put_contents($txt, implode("\n", $routes) . "\n");
+    file_put_contents($txt, implode("\n", $routes)."\n");
     unlink($tmp);
 }

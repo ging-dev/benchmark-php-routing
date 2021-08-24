@@ -10,11 +10,14 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Throwable;
 
-require __DIR__ . '/../vendor/autoload.php';
-
+require __DIR__.'/../vendor/autoload.php';
 
 final class QuickBenchmark
 {
+    public string $routeLongest;
+
+    public string $routeLast;
+
     public const BENCHMARKS = [
         'raw' => [
             // uncached, router instance is created in each iteration from scratch.
@@ -37,10 +40,10 @@ final class QuickBenchmark
             'symfony:instance' => Symfony\SymfonyInstance::class,
             'hack-routing:instance' => HackRouting\HackRoutingInstance::class,
             'fast-route(mark):instance' => FastRoute\FastRouteMarkBasedInstance::class,
-        ]
+        ],
     ];
 
-    public const REPEATS = 300;
+    public const REPEATS = 10;
 
     public const scenario = [
         'benchAll' => [182, 2], /* total number of routes */
@@ -76,16 +79,16 @@ final class QuickBenchmark
 
             foreach ($benchmark as $case => $class) {
                 foreach (self::scenario as $scenario => $revs) {
-                    $time = Shell\execute("php", ["-dopcache.jit=1235", "-dopcache.enable_cli=1", "-dopcache.enable=1", "-dapc.enable=1", "-dapc.enable_cli=1", __FILE__, '--case=' . $case, '--scenario=' . $scenario, '--group=' . $benchmark_group]);
+                    $time = Shell\execute('php', ['-dopcache.jit=1235', '-dopcache.enable_cli=1', '-dopcache.enable=1', '-dapc.enable=1', '-dapc.enable_cli=1', __FILE__, '--case='.$case, '--scenario='.$scenario, '--group='.$benchmark_group]);
                     $progressBar->advance();
 
-                    $results[$benchmark_group][] = array(
+                    $results[$benchmark_group][] = [
                         'case' => $case,
                         'scenario' => $scenario,
                         'time' => $time,
                         'repeats' => $revs[0] * $revs[1],
                         'per_second' => $revs[0] * $revs[1] / $time,
-                    );
+                    ];
                 }
             }
         }
@@ -99,7 +102,7 @@ final class QuickBenchmark
             });
 
             $table = new Table($output);
-            $table->setHeaderTitle('Benchmark results for group ' . $group . '.');
+            $table->setHeaderTitle('Benchmark results for group '.$group.'.');
             $table->setHeaders(['Case', 'Scenario', 'Routes', 'Time', 'Per Second']);
 
             foreach ($result as $data) {
@@ -108,7 +111,7 @@ final class QuickBenchmark
                     $data['scenario'],
                     $data['repeats'],
                     sprintf('%0.6f seconds', $data['time']),
-                    $data['per_second']
+                    $data['per_second'],
                 ]);
             }
             $table->render();
@@ -135,11 +138,12 @@ final class QuickBenchmark
 
                     $class = $benchmarks[$case];
                     $bench = new $class();
+                    $this->routeLongest = $bench->getLongestRoute()[0]['route'];
+                    $this->routeLast = $bench->getLastRoute()[0]['route'];
 
-                    for ($i = 0; $i < $repeats; $i++) {
-                        $routers[] = fn() => $this->$scenario_name($bench);
+                    for ($i = 0; $i < $repeats; ++$i) {
+                        $routers[] = fn () => $this->$scenario_name($bench);
                     }
-
                 }
             }
         }
@@ -159,12 +163,12 @@ final class QuickBenchmark
 
     public function benchLongest(Benchmark $bench): void
     {
-        $bench->runRouting($bench->getLongestRoute()[0]['route']);
+        $bench->runRouting($this->routeLongest);
     }
 
     public function benchLast(Benchmark $bench): void
     {
-        $bench->runRouting($bench->getLastRoute()[0]['route']);
+        $bench->runRouting($this->routeLast);
     }
 
     public function benchInvalidMethod(Benchmark $bench): void

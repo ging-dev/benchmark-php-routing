@@ -3,10 +3,9 @@
 namespace BenchmarkRouting\FastRoute;
 
 use BenchmarkRouting\Benchmark;
+use function FastRoute\cachedDispatcher;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
-
-use function FastRoute\cachedDispatcher;
 use function FastRoute\simpleDispatcher;
 
 abstract class AbstractFastRoute extends Benchmark
@@ -41,13 +40,13 @@ abstract class AbstractFastRoute extends Benchmark
             [$this, 'loadRoutes'],
             [
                 'dataGenerator' => $this->dataGeneratorClass,
-                'dispatcher' => $this->dispatcherClass
+                'dispatcher' => $this->dispatcherClass,
             ]
         );
     }
 
     public function loadRoutes(RouteCollector $routes): void
     {
-        include __DIR__ . '/../../routes/fastroute-routes.php';
+        include __DIR__.'/../../routes/fastroute-routes.php';
     }
 }

@@ -2,11 +2,11 @@
 
 /* Generates the routes for the benchmark */
 
-$txt = __DIR__ . '/../routes/bitbucket-routes.txt';
-$symfony_routes = __DIR__ . '/../routes/symfony-routes.php';
-$fastroute_routes = __DIR__ . '/../routes/fastroute-routes.php';
-$hack_routes = __DIR__ . '/../routes/hack-routes.php';
-$result_routes = __DIR__ . '/../routes/result-routes.php';
+$txt = __DIR__.'/../routes/routes.txt';
+$symfony_routes = __DIR__.'/../routes/symfony-routes.php';
+$fastroute_routes = __DIR__.'/../routes/fastroute-routes.php';
+$hack_routes = __DIR__.'/../routes/hack-routes.php';
+$result_routes = __DIR__.'/../routes/result-routes.php';
 
 $vars = ['john', 'paul', 'george', 'ringo'];
 
@@ -54,10 +54,10 @@ while ($r = fgets($fp)) {
 
 fclose($fp);
 
-file_put_contents($symfony_routes, "<?php \n\n\$routes = new Symfony\Component\Routing\RouteCollection(); \n\n" . implode("\n", $symfony) . "\n\nreturn \$routes;");
+file_put_contents($symfony_routes, "<?php \n\n\$routes = new Symfony\Component\Routing\RouteCollection(); \n\n".implode("\n", $symfony)."\n\nreturn \$routes;");
 printf("%s done.\n", basename($symfony_routes));
 
-file_put_contents($fastroute_routes, "<?php\n\n" . implode("\n", $fast));
+file_put_contents($fastroute_routes, "<?php\n\n".implode("\n", $fast));
 
 printf("%s done.\n", basename($fastroute_routes));
 
@@ -79,6 +79,6 @@ PHP
 
 printf("%s done.\n", basename($hack_routes));
 
-file_put_contents($result_routes, '<?php return array(' . implode(",\n\t", $routes) . ');');
+file_put_contents($result_routes, '<?php return array('.implode(",\n\t", $routes).');');
 
 printf("%s done.\n", basename($result_routes));

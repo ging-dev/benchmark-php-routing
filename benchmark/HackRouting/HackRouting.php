@@ -3,7 +3,6 @@
 namespace BenchmarkRouting\HackRouting;
 
 use BenchmarkRouting\Benchmark;
-use HackRouting\HttpMethod;
 use HackRouting\Router;
 use PhpBench\Attributes as Bench;
 
@@ -19,6 +18,6 @@ final class HackRouting extends Benchmark
 
     public function loadedRoutes(): Router
     {
-        return include __DIR__ . '/../../routes/hack-routes.php';
+        return include __DIR__.'/../../routes/hack-routes.php';
     }
 }

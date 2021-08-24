@@ -2,19 +2,18 @@
 
 namespace BenchmarkRouting;
 
-use PhpBench\Attributes as Bench;
-
-use Throwable;
 use function assert;
+use PhpBench\Attributes as Bench;
+use Throwable;
 
 /**
- * Benchmark routing the Bitbucket API paths
+ * Benchmark routing the Bitbucket API paths.
  */
 abstract class Benchmark
 {
     abstract public function runRouting(string $route, string $method = 'GET'): array;
 
-    #[Bench\Revs(100), Bench\Iterations(5), Bench\ParamProviders("getLastRoute"), Bench\Groups(['last'])]
+    #[Bench\Revs(100), Bench\Iterations(5), Bench\ParamProviders('getLastRoute'), Bench\Groups(['last'])]
     public function benchLast(array $last): void
     {
         $this->runRoute($last['route'], $last['result']);
@@ -25,10 +24,10 @@ abstract class Benchmark
         $routes = $this->getRoutes();
         $last = array_pop($routes);
 
-        return array($last);
+        return [$last];
     }
 
-    #[Bench\Revs(100), Bench\Iterations(5), Bench\ParamProviders("getLongestRoute"), Bench\Groups(['longest'])]
+    #[Bench\Revs(100), Bench\Iterations(5), Bench\ParamProviders('getLongestRoute'), Bench\Groups(['longest'])]
     public function benchLongest(array $longest): void
     {
         $this->runRoute($longest['route'], $longest['result']);
@@ -42,7 +41,7 @@ abstract class Benchmark
         });
         $longest = array_pop($routes);
 
-        return array($longest);
+        return [$longest];
     }
 
     #[Bench\Revs(4), Bench\Iterations(5), Bench\Groups(['all'])]
@@ -75,6 +74,6 @@ abstract class Benchmark
 
     public function getRoutes(): array
     {
-        return include __DIR__ . '/../routes/result-routes.php';
+        return include __DIR__.'/../routes/result-routes.php';
     }
 }

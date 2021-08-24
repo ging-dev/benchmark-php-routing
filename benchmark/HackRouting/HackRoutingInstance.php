@@ -3,10 +3,6 @@
 namespace BenchmarkRouting\HackRouting;
 
 use BenchmarkRouting\Benchmark;
-use HackRouting\AbstractMatcher;
-use HackRouting\BaseRouter;
-use HackRouting\Cache\MemoryCache;
-use HackRouting\HttpMethod;
 use HackRouting\Router;
 use PhpBench\Attributes as Bench;
 
@@ -17,9 +13,7 @@ final class HackRoutingInstance extends Benchmark
 
     public function __construct()
     {
-        $cache = new MemoryCache();
-
-        $this->router = include __DIR__ . '/../../routes/hack-routes.php';
+        $this->router = include __DIR__.'/../../routes/hack-routes.php';
 
         // warmup
         $this->benchAll();

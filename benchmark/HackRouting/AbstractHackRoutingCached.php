@@ -4,7 +4,6 @@ namespace BenchmarkRouting\HackRouting;
 
 use BenchmarkRouting\Benchmark;
 use HackRouting\Cache\CacheInterface;
-use HackRouting\HttpMethod;
 use HackRouting\Router;
 
 abstract class AbstractHackRoutingCached extends Benchmark
@@ -25,6 +24,6 @@ abstract class AbstractHackRoutingCached extends Benchmark
 
     public function loadedRoutes(CacheInterface $cache = null): Router
     {
-        return include __DIR__ . '/../../routes/hack-routes.php';
+        return include __DIR__.'/../../routes/hack-routes.php';
     }
 }
