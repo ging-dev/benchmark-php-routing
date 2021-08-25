@@ -31,6 +31,8 @@ jobs:
       - name: "installing dependencies"
         run: "composer install --no-interaction --no-progress --prefer-dist --no-dev --classmap-authoritative"
 
+      - name: "running first case"
+        run: php vendor/bin/phpbench run
       - name: "running benchmark"
         run: php vendor/bin/phpbench run --report=default --output=html
       - name: "create result.md"
